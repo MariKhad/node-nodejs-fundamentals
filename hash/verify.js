@@ -116,7 +116,7 @@ const verify = async () => {
 
   await checkFileAccess(checksumsPath);
 
-  const data = await fs.readFile("checksums.json", "utf8");
+  const data = await fs.readFile(checksumsPath, "utf8");
 
   let checksums = "";
 
