@@ -43,7 +43,6 @@ const snapshot = async () => {
   }
   const workspacePath = path.resolve(rowWorkspacePath);
 
-  console.log(`Scanning of ${workspacePath} starts...`);
   try {
     await fs.access(workspacePath);
     const stats = await fs.stat(workspacePath);
@@ -52,6 +51,7 @@ const snapshot = async () => {
       throw new Error("Path points to a FILE, but DIRECTORY is required");
     }
 
+    console.log(`Scanning of ${workspacePath} starts...`);
     const entries = await scanDirectory(workspacePath, "");
 
     const snapshotData = {

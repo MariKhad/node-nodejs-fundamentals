@@ -72,7 +72,7 @@ const findByExt = async () => {
     const foundFiles = await findFilesByExt(workspacePath, ext, "");
 
     if (!foundFiles.length) {
-      concole.log(
+      console.log(
         `No files with the extension ${ext} were found in the specified directory.`,
       );
 
