@@ -1,14 +1,28 @@
 import fs from "fs/promises";
 import path from "path";
 
-const restore = async () => {
-  let rowSnapshotPath = process.argv[2]?.replace(/^"|"$/g, "");
+/**
+ * Восстанавливает файлы и папки из snapshot.json в папке workspace_restored
+ * Папка workspace_restored создается в рабочей директории
+ * @async
+ * @throws {Error} Если путь к snapshot не указан
+ * @throws {Error} Если директория workspace_restored уже существует
+ * @throws {Error} Если snapshot не является файлом или имеет неверный формат
+ * @throws {Error} "FS operation failed" при ошибках файловой системы
+ *
+ * @example
+ * // Запуск: node restore.js /path/to/snapshot.json
+ * // Восстанавливает структуру в ./workspace_restored
+ */
 
-  if (!rowSnapshotPath) {
+const restore = async () => {
+  let rawSnapshotPath = process.argv[2]?.replace(/^"|"$/g, "");
+
+  if (!rawSnapshotPath) {
     throw new Error("Path to snapshot is required");
   }
 
-  const snapshotPath = path.resolve(rowSnapshotPath);
+  const snapshotPath = path.resolve(rawSnapshotPath);
 
   const restoreBaseDir = path.join(process.cwd(), "workspace_restored");
 

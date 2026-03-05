@@ -1,6 +1,14 @@
 import fs from "fs/promises";
 import path from "path";
 
+/**
+ * Парсит аргументы командной строки для получения списка файлов после флага --files
+ * @returns {string[]} Массив имен файлов, переданных через --files
+ *
+ * @example
+ * // node script.js --files file1.txt,file2.txt
+ * // return ['file1.txt', 'file2.txt']
+ */
 const parseFilesOrder = () => {
   let filesOrder = [];
 
@@ -14,6 +22,17 @@ const parseFilesOrder = () => {
   return filesOrder;
 };
 
+/**
+ * Проверяет существование файлов и их расширение в указанной директории
+ * @param {string} partsPath - Путь к директории parts
+ * @param {string[]} files - Массив имен файлов для проверки
+ * @returns {Promise<boolean>} true если все файлы существуют и имеют расширение .txt
+ * @throws {Error} Детализированная ошибка с перечнем отсутствующих файлов или файлов с неверным расширением
+ *
+ * @example
+ * // Проверяет файлы file1.txt и file2.txt в папке ./workspace/parts
+ * await validateFilesExist('./workspace/parts', ['file1.txt', 'file2.txt'])
+ */
 const validateFilesExist = async (partsPath, files) => {
   const missingFiles = [];
   const invalidExtFiles = [];
@@ -48,6 +67,22 @@ const validateFilesExist = async (partsPath, files) => {
   return true;
 };
 
+/**
+ * Определяет путь к рабочей директории из аргументов командной строки
+ * По умолчанию это текущая рабочая директория (process.cwd())
+ * Игнорирует флаги (начинающиеся с --) и значения после --files
+ * @returns {string} Абсолютный путь к рабочей директории
+ *
+ * @example
+ * // node script.js --files file1.txt ./my-workspace
+ * // return '/absolute/path/to/my-workspace'
+ *
+ * // node script.js ./my-workspace --files file1.txt
+ * // return '/absolute/path/to/my-workspace'
+ *
+ * // node script.js (без указания пути)
+ * // return process.cwd()
+ */
 const getWorkspacePath = () => {
   let workspacePath = process.cwd();
   for (let i = 2; i < process.argv.length; i++) {
@@ -102,8 +137,6 @@ const merge = async () => {
       }
 
       mergedContent += content + "\n\n";
-
-      mergedContent;
     }
     await fs.writeFile(path.join(workspacePath, "merged.txt"), mergedContent);
     return;

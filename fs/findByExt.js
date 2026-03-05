@@ -1,6 +1,14 @@
 import fs from "fs/promises";
 import path from "path";
 
+/**
+ * Получает расширение для поиска из аргументов командной строки
+ * @returns {string} Расширение файла (с точкой)
+ * @example
+ * // --ext txt → возвращает ".txt"
+ * // --ext .js → возвращает ".js"
+ * // без --ext → возвращает ".txt" (по умолчанию)
+ */
 const findExt = () => {
   let ext = ".txt";
 
@@ -18,13 +26,22 @@ const findExt = () => {
   return ext;
 };
 
-const findFilesByExt = async (
-  currentPath,
-  extension,
-  relativePath = "",
-  foundFiles = [],
-) => {
+/**
+ * Рекурсивно ищет файлы с указанным расширением в директории
+ * @param {string} currentPath - Путь к текущей директории для поиска
+ * @param {string} extension - Расширение файла (с точкой)
+ * @param {string} relativePath - Относительный путь от корня (для формирования результата)
+ * @returns {Promise<string[]>} Массив найденных файлов с относительными путями
+ * @throws {Error} Если возникла ошибка при чтении директории
+ *
+ * @example
+ * // Поиск всех .txt файлов в ./workspace
+ * const files = await findFilesByExt('./workspace', '.txt');
+ * // возвращает ['file1.txt', 'subdir/file2.txt', 'docs/readme.txt']
+ */
+const findFilesByExt = async (currentPath, extension, relativePath = "") => {
   try {
+    const foundFiles = [];
     const items = await fs.readdir(currentPath);
 
     for (const item of items) {
@@ -32,30 +49,50 @@ const findFilesByExt = async (
       const stats = await fs.stat(fullPath);
 
       if (stats.isDirectory()) {
-        await findFilesByExt(
+        const subDirFiles = await findFilesByExt(
           fullPath,
           extension,
           path.join(relativePath, item),
-          foundFiles,
         );
+        foundFiles.push(...subDirFiles);
       } else if (stats.isFile() && item.endsWith(extension)) {
         foundFiles.push(path.join(relativePath, item));
       }
     }
 
     return foundFiles;
-  } catch (e) {
-    console.error(`Error reading ${currentPath}:`, error.message);
+  } catch (error) {
+    console.error(`Error reading directory ${currentPath}:`, error.message);
+    throw new Error(`Failed to scan directory: ${currentPath}`);
   }
 };
 
+/**
+ * Основная функция для поиска файлов по расширению
+ * Принимает путь к директории из аргументов командной строки
+ * Выводит отсортированный список найденных файлов с указанным расширением
+ * @async
+ * @throws {Error} Если путь не указан или не существует
+ * @throws {Error} Если путь указывает на файл, а не директорию
+ * @throws {Error} "FS operation failed" при ошибках файловой системы
+ *
+ * @example
+ * // Запуск: node findByExt.js /path/to/workspace --ext .txt
+ * // Вывод: список всех .txt файлов в директории
+ *
+ * // Запуск: node findByExt.js /path/to/workspace --ext js
+ * // Вывод: список всех .js файлов (точка добавляется автоматически)
+ *
+ * // Запуск: node findByExt.js /path/to/workspace
+ * // Вывод: список всех .txt файлов (расширение по умолчанию)
+ */
 const findByExt = async () => {
-  let rowWorkspacePath = process.argv[2]?.replace(/^"|"$/g, "");
+  let rawWorkspacePath = process.argv[2]?.replace(/^"|"$/g, "");
 
-  if (!rowWorkspacePath) {
+  if (!rawWorkspacePath) {
     throw new Error("Workspace path is required");
   }
-  const workspacePath = path.resolve(rowWorkspacePath);
+  const workspacePath = path.resolve(rawWorkspacePath);
 
   try {
     await fs.access(workspacePath);

@@ -1,6 +1,20 @@
 import fs from "fs/promises";
 import path from "path";
 
+/**
+ * Рекурсивно сканирует директорию и собирает информацию о всех файлах и папках
+ * @param {string} currentPath - Абсолютный путь к текущей директории для сканирования
+ * @param {string} relativePath - Относительный путь от корневой директории (по умолчанию "")
+ * @param {Array} entries - Массив для накопления результатов (используется при рекурсии)
+ * @returns {Promise<Array>} Массив объектов с информацией о файлах и папках
+ *
+ * @example
+ * // Возвращает массив вида:
+ * [
+ *   { path: "folder", type: "directory" },
+ *   { path: "folder/file.txt", type: "file", size: 1234, content: "base64..." }
+ * ]
+ */
 const scanDirectory = async (currentPath, relativePath = "", entries = []) => {
   const items = await fs.readdir(currentPath);
 
@@ -35,13 +49,25 @@ const scanDirectory = async (currentPath, relativePath = "", entries = []) => {
   return entries;
 };
 
+/**
+ * Создает snapshot указанной директории со всем содержимым
+ * Сканирует директорию рекурсивно и сохраняет структуру в snapshot.json
+ * @async
+ * @throws {Error} Если путь не указан или не существует
+ * @throws {Error} Если путь указывает на файл, а не директорию
+ * @throws {Error} "FS operation failed" при ошибках файловой системы
+ *
+ * @example
+ * // Запуск: node snapshot.js /path/to/workspace
+ * // Создает /path/to/workspace/snapshot.json
+ */
 const snapshot = async () => {
-  let rowWorkspacePath = process.argv[2]?.replace(/^"|"$/g, "");
+  let rawWorkspacePath = process.argv[2]?.replace(/^"|"$/g, "");
 
-  if (!rowWorkspacePath) {
+  if (!rawWorkspacePath) {
     throw new Error("Workspace path is required");
   }
-  const workspacePath = path.resolve(rowWorkspacePath);
+  const workspacePath = path.resolve(rawWorkspacePath);
 
   try {
     await fs.access(workspacePath);
