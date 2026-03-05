@@ -72,8 +72,6 @@ const restore = async () => {
   } catch (error) {
     if (error?.code === "ENOENT") {
       console.error("Path does not exist:", rowSnapshotPath);
-    } else if (error?.code === "EACCES") {
-      console.error("No permission to access:", rowSnapshotPath);
     }
     throw new Error(`FS operation failed: ${error?.message || ""}`);
   }

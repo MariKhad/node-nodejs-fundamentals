@@ -30,8 +30,8 @@ const parseFilesOrder = () => {
  * @throws {Error} Детализированная ошибка с перечнем отсутствующих файлов или файлов с неверным расширением
  *
  * @example
- * // Проверяет файлы file1.txt и file2.txt в папке ./workspace/parts
- * await validateFilesExist('./workspace/parts', ['file1.txt', 'file2.txt'])
+ * // Проверяет файлы file1.txt и file2.txt в папке "C:\Users\test\parts"
+ * await validateFilesExist("C:\Users\test\parts", ['file1.txt', 'file2.txt'])
  */
 const validateFilesExist = async (partsPath, files) => {
   const missingFiles = [];
@@ -75,9 +75,6 @@ const validateFilesExist = async (partsPath, files) => {
  *
  * @example
  * // node script.js --files file1.txt "./my-workspace"
- * // return '/absolute/path/to/my-workspace'
- *
- * // node script.js "./my-workspace" --files file1.txt
  * // return '/absolute/path/to/my-workspace'
  *
  * // node script.js (без указания пути)
@@ -133,7 +130,7 @@ const merge = async () => {
       });
 
       if (stats.size === 0) {
-        console.log(`Файл ${file} имеет нулевой размер!`);
+        console.log(`File ${file} is empty!`);
       }
 
       mergedContent += content + "\n\n";
@@ -143,8 +140,6 @@ const merge = async () => {
   } catch (error) {
     if (error?.code === "ENOENT") {
       console.error("Path does not exist:", partsDirPath);
-    } else if (error?.code === "EACCES") {
-      console.error("No permission to access:", partsDirPath);
     }
     throw new Error(`FS operation failed: ${error?.message || ""}`);
   }

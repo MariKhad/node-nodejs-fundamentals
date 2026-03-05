@@ -44,13 +44,6 @@ const getWorkspacePath = () => {
  * // Проверка существующего файла
  * await checkFileAccess('./workspace/file.txt');
  * // (тихо проходит, если файл доступен)
- *
- * @example
- * // Проверка несуществующего файла
- * await checkFileAccess('./missing.txt');
- * // File does not exist: ./missing.txt
- * // Error: FS operation failed
- *
  */
 const checkFileAccess = async (path) => {
   try {
@@ -109,6 +102,25 @@ const calculateFileHash = (filePath) => {
   });
 };
 
+/**
+ * Функция верификации файлов по их контрольным суммам
+ * Читает файл checksums.json из указанной директории, если не указана то из рабочей директории,
+ * Вычисляет SHA256 хеши для каждого указанного файла и сравнивает с ожидаемыми значениями
+ * @async
+ * @throws {Error} "FS operation failed" при критических ошибках:
+ * - Отсутствует или недоступен файл checksums.json
+ * - Невалидный JSON в checksums.json
+ * - Ошибки доступа к проверяемым файлам
+ * @returns {Promise<void>}
+ *
+ * @example
+ * // Запуск с указанием рабочей директории
+ * // node verify.js "./workspace"
+ * // Пример вывода:
+ * // file1.txt — OK
+ * // file2.txt — FAIL
+ * // Files not found: file3.jpg
+ */
 const verify = async () => {
   const workspacePath = getWorkspacePath();
 
