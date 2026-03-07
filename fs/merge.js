@@ -121,14 +121,9 @@ const merge = async () => {
 
     for (const file of filesToMerge) {
       const filePath = path.join(partsDirPath, file);
+      const content = await fs.readFile(filePath, { encoding: "utf8" });
 
-      const stats = await fs.stat(filePath);
-
-      const content = await fs.readFile(path.join(partsDirPath, file), {
-        encoding: "utf8",
-      });
-
-      if (stats.size === 0) {
+      if (content.length === 0) {
         console.log(`File ${file} is empty!`);
       }
 

@@ -4,15 +4,6 @@ import path from "path";
 /**
  * Восстанавливает файлы и папки из snapshot.json в папке workspace_restored
  * Папка workspace_restored создается в рабочей директории
- * @async
- * @throws {Error} Если путь к snapshot не указан
- * @throws {Error} Если директория workspace_restored уже существует
- * @throws {Error} Если snapshot не является файлом или имеет неверный формат
- * @throws {Error} "FS operation failed" при ошибках файловой системы
- *
- * @example
- * // Запуск: node restore.js "/path/to/snapshot.json"
- * // Восстанавливает структуру в ./workspace_restored
  */
 
 const restore = async () => {
@@ -58,7 +49,7 @@ const restore = async () => {
 
       if (entry.type === "directory") {
         await fs.mkdir(fullRestorePath, { recursive: true });
-        console.log(`📁 Created directory: ${entry.path}`);
+        console.log(`Created directory: ${entry.path}`);
       } else if (entry.type === "file") {
         const parentDir = path.dirname(fullRestorePath);
         await fs.mkdir(parentDir, { recursive: true });
