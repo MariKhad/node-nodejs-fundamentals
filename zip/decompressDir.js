@@ -68,7 +68,6 @@ function readHeader(buffer) {
 
 /**
  * Функция распаковки архива, распаковывает если архив сжат правильно
- *
  */
 const decompressDir = async () => {
   const workspacePath = getWorkspacePath();
