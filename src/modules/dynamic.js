@@ -1,5 +1,5 @@
-import path from "path";
 import fs from "fs/promises";
+import path from "path";
 import { fileURLToPath } from "url";
 
 /**
@@ -17,7 +17,7 @@ const checkFileAccess = async (path) => {
 
 /**
  * Динамически подгружает плагины
- * Адреса плагинов берутся как аргумент командной строки, указывать название надо без расширения
+ * Адреса плагинов берутся как аргумент командной строки
  */
 const dynamic = async () => {
   const pluginName = process.argv[2];
@@ -30,7 +30,11 @@ const dynamic = async () => {
   }
 
   try {
-    const pluginPath = path.join(dirname, "plugins", `${pluginName}.js`);
+    const fileName = pluginName?.endsWith(".js")
+      ? pluginName
+      : `${pluginName}.js`;
+
+    const pluginPath = path.join(dirname, "plugins", fileName);
 
     await checkFileAccess(pluginPath);
 
