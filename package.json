@@ -1,0 +1,38 @@
+{
+  "name": "node-nodejs-fundamentals",
+  "version": "1.0.0",
+  "description": "Node.js Fundamentals assignment repository",
+  "engines": {
+    "node": ">=24.10.0",
+    "npm": ">=10.9.2"
+  },
+  "type": "module",
+  "scripts": {
+    "fs:snapshot": "node src/fs/snapshot.js",
+    "fs:restore": "node src/fs/restore.js",
+    "fs:findByExt": "node src/fs/findByExt.js --ext txt",
+    "fs:merge": "node src/fs/merge.js",
+    "cli:interactive": "node src/cli/interactive.js",
+    "cli:progress": "node src/cli/progress.js",
+    "modules:dynamic": "node src/modules/dynamic.js uppercase",
+    "hash:verify": "node src/hash/verify.js",
+    "streams:lineNumberer": "echo 'hello\nworld' | node src/streams/lineNumberer.js",
+    "streams:filter": "echo 'hello\nworld\ntest' | node src/streams/filter.js --pattern test",
+    "streams:split": "node src/streams/split.js --lines 10",
+    "zip:compressDir": "node src/zip/compressDir.js",
+    "zip:decompressDir": "node src/zip/decompressDir.js",
+    "wt:main": "node src/wt/main.js",
+    "cp:execCommand": "node src/cp/execCommand.js \"echo 'Hello World'\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlreadyBored/node-nodejs-fundamentals.git"
+  },
+  "keywords": [
+    "nodejs",
+    "fundamentals",
+    "assignments"
+  ],
+  "author": "alreadybored",
+  "license": "ISC"
+}

@@ -1,0 +1,12 @@
+node_modules/
+.DS_Store
+*.log
+npm-debug.log*
+.env
+workspace/
+workspace_restored/
+snapshot.json
+data.json
+checksums.json
+source.txt
+chunk_*.txt
