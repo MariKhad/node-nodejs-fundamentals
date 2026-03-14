@@ -7,24 +7,24 @@ This repository contains solutions for Node.js Fundamentals assignment. The assi
 ## Getting Started
 
 1. **Fork this repository**
-   
+
    Click the "Fork" button at the top right of this page: https://github.com/AlreadyBored/node-nodejs-fundamentals
 
 2. **Clone your fork**
-   
+
    ```bash
    git clone https://github.com/YOUR_USERNAME/node-nodejs-fundamentals.git
    cd node-nodejs-fundamentals
    ```
 
 3. **Install dependencies** (if any added in the future)
-   
+
    ```bash
    npm install
    ```
 
 4. **Start implementing the tasks**
-   
+
    Each file in the `src/` directory contains a function template with comments describing what needs to be implemented.
 
 ## Requirements
